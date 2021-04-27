@@ -34,7 +34,18 @@ Pod::Spec.new do |s|
   end
 
   # Firebase dependencies
-  s.dependency          'Firebase/Analytics', firebase_sdk_version
+  if defined?($RNFirebaseAnalyticsWithoutAdIdSupport)
+    Pod::UI.puts "#{s.name}: Using Firebase/AnalyticsWithoutAdIdSupport pod in place of Firebase/Analytics"
+
+    # Releasing as non-breaking change as it is optional but it raises minimum requirements, validate just in case
+    if (Gem::Version.new(firebase_sdk_version) < Gem::Version.new("7.11.0"))
+      raise "Firebase/AnalyticsWithoutAdIdSupport requires firebase-ios-sdk 7.11.0 or greater"
+    end
+
+    s.dependency          'Firebase/AnalyticsWithoutAdIdSupport', firebase_sdk_version
+  else
+    s.dependency          'Firebase/Analytics', firebase_sdk_version
+  end
 
   if defined?($RNFirebaseAsStaticFramework)
     Pod::UI.puts "#{s.name}: Using overridden static_framework value of '#{$RNFirebaseAsStaticFramework}'"
