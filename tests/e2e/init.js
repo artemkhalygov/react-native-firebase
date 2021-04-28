@@ -53,7 +53,7 @@ beforeEach(async function beforeEach() {
 afterEach(async function afterEach() {
   await waitFor(element(by.id('welcome')).atIndex(0)) // the testID for the Root View in app.js
     .toBeVisible()
-    .withTimeout(10000); // If app reloads, it takes some time to re-display
+    .withTimeout(20000); // If app reloads, it takes some time to re-display
 });
 
 after(async function () {
